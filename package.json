@@ -1,0 +1,31 @@
+{
+  "name": "red-rings-couchdb",
+  "version": "1.0.0",
+  "description": "CouchDB backend for red-rings/abrasive-ducks",
+  "main": "index.js",
+  "scripts": {
+    "prepublishOnly": "npm install --only=dev && rm -f package-lock.json && coffee -c *.md",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/shimaore/red-rings-couchdb"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "dependencies": {
+    "@most/create": "^2.0.1",
+    "abrasive-ducks": "file:../abrasive-ducks",
+    "abrasive-ducks-transducers": "^1.0.0",
+    "concat-stream": "^1.6.0",
+    "most": "^1.7.3",
+    "oboe": "^2.1.4",
+    "oboe-as-stream": "^1.0.0",
+    "oboe-stream-request": "^1.0.0",
+    "red-rings": "^1.1.0",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "coffeescript": "^2.2.1"
+  }
+}
