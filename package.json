@@ -15,7 +15,7 @@
   "license": "Unlicense",
   "dependencies": {
     "@most/create": "^2.0.1",
-    "abrasive-ducks": "file:../abrasive-ducks",
+    "abrasive-ducks": "^1.0.0",
     "abrasive-ducks-transducers": "^1.0.0",
     "concat-stream": "^1.6.0",
     "most": "^1.7.3",
