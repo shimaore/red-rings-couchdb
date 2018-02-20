@@ -21,8 +21,15 @@ TBD / FIXME : only handle known record types ?
           db
           .get message.id, rev: message.rev
           .then (doc) ->
+
+The entries in the `.doc` field are interpreted as simple `set` operations.
+
             for name, value of message.doc
               doc[name] = value
+
+The entries in the `.operations` field are executed by `json_path`.
+Notice that these might fail, in which case the update will not be saved.
+
             for path, cmd of message.operations
               [op,args...] = cmd
               return unless json_path doc, path, op, args
@@ -99,10 +106,11 @@ The output is the combination of:
 - subscriptions to document changes in the database
 
           changes.map (msg) ->
-            msg.op = NOTIFY
-            msg.value = rev: msg.doc._rev # or msg.changes[0].rev
-            msg.key = msg.id
-            msg
+            Object.assign {
+              op: NOTIFY
+              value: rev: msg.doc._rev # or msg.changes[0].rev
+              key: msg.id
+            }, msg
 
 - requested documents in the database
 
@@ -116,14 +124,16 @@ The output is the combination of:
 - subscriptions to changes in the view
 
           view_changes.map (msg) ->
-            msg.op = NOTIFY
-            msg
+            Object.assign {
+              op: NOTIFY
+            }, msg
 
 - requested entries in the view
 
           view_values.map (msg) ->
-            msg.op = NOTIFY
-            msg
+            Object.assign {
+              op: NOTIFY
+            }, msg
 
         ]
 
