@@ -4,7 +4,7 @@
   "description": "CouchDB backend for red-rings/abrasive-ducks",
   "main": "index.js",
   "scripts": {
-    "prepublishOnly": "npm install --only=dev && rm -f package-lock.json && coffee -c *.md",
+    "prepublishOnly": "npm install --only=dev && rm -f package-lock.json && coffee -c *.coffee.md util/*.coffee.md",
     "test": "mocha"
   },
   "repository": {
