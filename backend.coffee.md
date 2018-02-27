@@ -7,39 +7,53 @@ TBD / FIXME : only handle known record types ?
 - `db` and `db_uri` refer to the same database.
 - `all_map`, `app`, `view` refer to the same view.
 
-    couchdb_backend = (db,db_uri,all_map,app,view) ->
+    couchdb_backend = (db,db_uri,all_map,app,view,fromJS) ->
+
+      apply_cmd = (doc,cmd) ->
+        op = cmd.get 0
+        path = cmd.get 1
+        args = cmd.skip 2
+        json_path doc, path, op, args
 
       semantic =
 
-        create: ({id,doc}) ->
-          doc._id = id
+        create: (msg) ->
+          doc = msg
+            .get 'doc'
+            .set '_id', msg.get 'id'
           db
-          .put doc
+          .put doc.toJS()
           .catch -> yes
 
-        update: (message) ->
+        update: (msg) ->
+          id = msg.get 'id'
+          rev = msg.get 'rev'
+          msg_doc = msg.get 'doc'
+          operations = msg.get 'operations'
+
           db
-          .get message.id, rev: message.rev
+          .get id, {rev}
           .then (doc) ->
+
+            doc = fromJS doc
 
 The entries in the `.doc` field are interpreted as simple `set` operations.
 
-            for name, value of message.doc
-              doc[name] = value
+            doc = doc.merge msg_doc if msg_doc?
 
 The entries in the `.operations` field are executed by `json_path`.
 Notice that these might fail, in which case the update will not be saved.
 
-            for path, cmd of message.operations
-              [op,args...] = cmd
-              return unless json_path doc, path, op, args
+            doc = operations?.reduce apply_cmd, doc
 
-            db.put doc
+            db.put doc.toJS()
           .catch -> yes
 
-        delete: (message) ->
+        delete: (msg) ->
+          id = msg.get 'id'
+          rev = msg.get 'rev'
           db
-          .delete _id: message.id, _rev: message.rev
+          .delete _id: id, _rev: rev
           .catch -> yes
 
 Document changes
@@ -87,7 +101,7 @@ Fetch current value, return a message similar to a row from `_all_docs`.
 
         values =
           subscriptions_keys
-          .filter is_string # Can only retrieve string keys
+          .filter is_string # Can only retrieve string keys from a database
           .map (key) -> db.get(key).catch -> null
           .chain most.fromPromise
           .filter not_null
@@ -106,34 +120,34 @@ The output is the combination of:
 - subscriptions to document changes in the database
 
           changes.map (msg) ->
-            Object.assign {
+            Immutable.Map msg
+            .merge
               op: NOTIFY
               value: rev: msg.doc._rev # or msg.changes[0].rev
+              doc: fromJS msg.doc
               key: msg.id
-            }, msg
 
 - requested documents in the database
 
           values.map (doc) ->
-            op: NOTIFY
-            id: doc._id
-            key: doc._id
-            value: rev: doc._rev
-            doc: doc
+            Immutable.Map
+              op: NOTIFY
+              id: doc._id
+              key: doc._id
+              value: rev: doc._rev
+              doc: fromJS doc
 
 - subscriptions to changes in the view
 
           view_changes.map (msg) ->
-            Object.assign {
-              op: NOTIFY
-            }, msg
+            Immutable.Map msg
+            .set 'op', NOTIFY
 
 - requested entries in the view
 
           view_values.map (msg) ->
-            Object.assign {
-              op: NOTIFY
-            }, msg
+            Immutable.Map msg
+            .set 'op', NOTIFY
 
         ]
 
@@ -141,8 +155,9 @@ The output is the combination of:
 
     changes_view = require './util/changes-view'
     view_as_stream = require './util/view'
-    changes_semantic = require 'abrasive-ducks/util/changes-semantic'
+    changes_semantic = require 'red-rings-semantic'
     all_changes = require './util/all-changes'
+    json_path = require 'red-rings-path'
     {operation,Key,is_string,is_object,not_null,has_key} = require 'abrasive-ducks-transducers'
     most = require 'most'
     {UPDATE,SUBSCRIBE,UNSUBSCRIBE,NOTIFY} = require 'red-rings/operations'
