@@ -160,4 +160,5 @@ The output is the combination of:
     json_path = require 'red-rings-path'
     {operation,Key,is_string,is_object,not_null,has_key} = require 'abrasive-ducks-transducers'
     most = require 'most'
+    Immutable = require 'immutable'
     {UPDATE,SUBSCRIBE,UNSUBSCRIBE,NOTIFY} = require 'red-rings/operations'

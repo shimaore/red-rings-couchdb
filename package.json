@@ -20,6 +20,7 @@
     "abrasive-ducks": "^1.0.0",
     "abrasive-ducks-transducers": "^1.0.0",
     "concat-stream": "^1.6.0",
+    "immutable": "^4.0.0-rc.9",
     "most": "^1.7.3",
     "oboe": "^2.1.4",
     "oboe-as-stream": "^1.0.0",
