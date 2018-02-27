@@ -120,7 +120,7 @@ The output is the combination of:
 - subscriptions to document changes in the database
 
           changes.map (msg) ->
-            Immutable.Map msg
+            Immutable.fromJS msg
             .merge
               op: NOTIFY
               value: rev: msg.doc._rev # or msg.changes[0].rev
@@ -140,13 +140,13 @@ The output is the combination of:
 - subscriptions to changes in the view
 
           view_changes.map (msg) ->
-            Immutable.Map msg
+            Immutable.fromJS msg
             .set 'op', NOTIFY
 
 - requested entries in the view
 
           view_values.map (msg) ->
-            Immutable.Map msg
+            Immutable.fromJS msg
             .set 'op', NOTIFY
 
         ]

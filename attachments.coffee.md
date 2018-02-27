@@ -21,6 +21,7 @@ Creates a thru stream (that should be applied to the output of the backend).
                 path = "#{base}/#{ec name}"
                 msg = msg.setIn ['doc','_attachments',name,'download_uri'], download_uri path, rev
                 msg = msg.setIn ['doc','_attachments',name,'upload_uri'], upload_uri path, rev
+              return
             msg
 
       {handler,thru}
