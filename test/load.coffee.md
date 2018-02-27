@@ -1,3 +1,4 @@
     describe 'The module', ->
       it 'should load', ->
         require '../backend'
+        require '../attachments'

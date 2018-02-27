@@ -10,22 +10,18 @@ Creates a thru stream (that should be applied to the output of the backend).
 
       thru = (stream) ->
         stream.map (msg) ->
-          return msg unless msg.value?.rev? and msg.doc?._attachments?
+          rev = msg.getIn ['value','rev']
+          attachments = msg.getIn ['doc','_attachments']
+          return msg unless rev? and attachments?
 
-          _attachments = {}
-          rev = msg.value.rev
-          for own name, rec of msg.doc._attachments
-            do (name,rec) ->
-              if rec.stub
-                path = "#{pathname}/#{ec msg.id}/#{ec name}"
-                rec = Object.assign {
-                  download_uri: download_uri path, rev
-                  upload_uri: upload_uri path, rev
-                }, rec
-              _attachments[name] = rec
-
-          doc = Object.assign {}, msg.doc, {_attachments}
-          Object.assign {}, msg, {doc}
+          base = "#{pathname}/#{ec msg.get 'id'}"
+          msg.withMutations (msg) ->
+            attachments.forEach (rec,name) ->
+              if rec.has 'stub'
+                path = "#{base}/#{ec name}"
+                msg = msg.setIn ['doc','_attachments',name,'download_uri'], download_uri path, rev
+                msg = msg.setIn ['doc','_attachments',name,'upload_uri'], upload_uri path, rev
+            msg
 
       {handler,thru}
 
