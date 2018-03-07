@@ -7,13 +7,14 @@ Web server
     REV = 'rev'
     UNTIL = 'until'
 
-    attachments_proxy = ( the_proxy_url, the_target_url, {secret,hash,timeout}, request_options = {}) ->
+    attachments_proxy = ( our_proxy ) ->
+
+      {secret,hash,timeout} = our_proxy
 
       hash ?= 'sha256'
       timeout ?= 3600*1000 # one hour
 
       signature = (method,pathname,rev,limit) ->
-        {strictEqual} = require 'assert'
         strictEqual 'string', typeof method, 'method'
         strictEqual 'string', typeof pathname, 'pathname'
         strictEqual 'string', typeof rev, 'rev'
@@ -35,21 +36,21 @@ Web server
 
         proxy = ->
           {method} = req
-          target_url = new URL the_target_url
-          target_url.pathname = pathname
-          target_url.searchParams.set 'rev', rev
-          url = target_url.toString()
+          options = our_proxy.target pathname
+          return next() unless options?.url?
+
+          options.url.searchParams.set 'rev', rev
+          options.url = options.url.toString()
 
           the_proxy = request Object.assign {
             method
-            url
             followRedirects: false
             maxRedirects: 0
-          }, request_options
+          }, options
           req.pipe the_proxy
           the_proxy.pipe res
 
-        {pathname,searchParams} = new URL req.url, the_proxy_url
+        {pathname,searchParams} = new URL req.url, our_proxy.url
 
         token = searchParams.get TOKEN
         return next 'Invalid token' unless token?
@@ -78,7 +79,7 @@ Web server
 
       uri_maker = (direction) ->
         (path,rev) ->
-          url = new URL path, the_proxy_url
+          url = new URL path, our_proxy.url
           url.searchParams.set REV, rev
           limit = Date.now() + timeout
           url.searchParams.set UNTIL, limit
@@ -94,3 +95,4 @@ Web server
     {URL} = require 'url'
     crypto = require 'crypto'
     request = require 'request'
+    {strictEqual} = assert = require 'assert'

@@ -1,7 +1,6 @@
 CouchDB back-end
 ----------------
 
-TBD / FIXME : attachments
 TBD / FIXME : only handle known record types ?
 
 - `db` and `db_uri` refer to the same database.

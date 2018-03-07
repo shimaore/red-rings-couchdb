@@ -2,11 +2,16 @@ Creates a thru stream (that should be applied to the output of the backend).
 
     ec = encodeURIComponent
 
-    attachments = (the_proxy_url,more...) ->
+In the parameter we need:
+- .url — base url (used to build URIs provided to external users)
+- .target — a function that takes and id and returns a set of request options (esp. `.url` which must be a `new URL` object)
+- .secret
+- .hash (defaults to `sha256`)
+- .timeout (defaults to one hour)
 
-      {handler,download_uri,upload_uri} = proxy the_proxy_url, more...
+    attachments = (our_proxy) ->
 
-      {pathname} = new URL the_proxy_url
+      {handler,download_uri,upload_uri} = proxy our_proxy
 
       thru = (stream) ->
         stream.map (msg) ->
@@ -14,11 +19,12 @@ Creates a thru stream (that should be applied to the output of the backend).
           attachments = msg.getIn ['doc','_attachments']
           return msg unless rev? and attachments?
 
-          base = "#{pathname}/#{ec msg.get 'id'}"
+          id = msg.get 'id'
+          ec_id = ec id
           msg.withMutations (msg) ->
             attachments.forEach (rec,name) ->
               if rec.has 'stub'
-                path = "#{base}/#{ec name}"
+                path = "/#{ec_id}/#{ec name}"
                 msg = msg.setIn ['doc','_attachments',name,'download_uri'], download_uri path, rev
                 msg = msg.setIn ['doc','_attachments',name,'upload_uri'], upload_uri path, rev
               return
