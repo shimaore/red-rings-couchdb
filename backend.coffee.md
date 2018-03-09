@@ -35,6 +35,7 @@ TBD / FIXME : only handle known record types ?
           .then (doc) ->
 
             doc = fromJS doc
+            old_doc = doc
 
 The entries in the `.doc` field are interpreted as simple `set` operations.
 
@@ -44,6 +45,10 @@ The entries in the `.operations` field are executed by `json_path`.
 Notice that these might fail, in which case the update will not be saved.
 
             doc = operations?.reduce apply_cmd, doc
+
+Do not modify the database if the document was not modified.
+
+            return if doc.equals old_doc
 
             db.put doc.toJS()
           .catch -> yes
