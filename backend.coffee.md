@@ -158,7 +158,7 @@ Fetch current value, return a message similar to a row from `_all_docs`.
 
 Compute values for wandering-country-view/all by querying the server-side view.
 
-       view_values =
+        view_values =
           subscriptions_keys
           .chain view_key
 
