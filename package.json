@@ -1,6 +1,6 @@
 {
   "name": "red-rings-couchdb",
-  "version": "2.0.1",
+  "version": "3.0.0-3",
   "description": "CouchDB backend for red-rings/abrasive-ducks",
   "main": "index.js",
   "scripts": {
@@ -20,15 +20,18 @@
     "abrasive-ducks": "^3.0.2",
     "abrasive-ducks-transducers": "^2.0.0",
     "concat-stream": "^1.6.0",
+    "eventsource": "^1.0.5",
     "immutable": "^4.0.0-rc.9",
     "most": "^1.7.3",
+    "most-w3msg": "^2.0.0",
     "oboe": "^2.1.4",
     "oboe-as-stream": "^1.0.0",
     "oboe-stream-request": "^1.0.0",
     "red-rings": "^1.1.0",
     "red-rings-path": "^1.0.0",
     "red-rings-semantic": "^1.1.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "superagent": "^3.8.2"
   },
   "devDependencies": {
     "coffeescript": "^2.2.1",

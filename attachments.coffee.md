@@ -1,6 +1,7 @@
 Creates a thru stream (that should be applied to the output of the backend).
 
     ec = encodeURIComponent
+    dc = decodeURIComponent
 
 In the parameter we need:
 - .url — base url (used to build URIs provided to external users)
@@ -10,6 +11,13 @@ In the parameter we need:
 - .timeout (defaults to one hour)
 
     attachments = (our_proxy) ->
+      target = our_proxy.target
+
+      our_proxy.target = (pathname) ->
+        return null unless $ = pathname.match ///
+          ^ / ([^/]+) / (.+) $
+        ///
+        target? pathname, dc($[1]), $[2]
 
       {handler,download_uri,upload_uri} = proxy our_proxy
 
