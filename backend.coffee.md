@@ -75,6 +75,7 @@ On initial subscription we convert the key into a stream, using the server-side 
     most = require 'most'
     CouchDB = require './util/db'
     semantic_for = require './util/semantic-for'
+    build_backend = require './util/build-backend'
 
 FIXME: figure out the pattern to push in bulk
 
