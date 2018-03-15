@@ -24,14 +24,18 @@ Document changes
 
 Changeset for wandering-country-view/all (or other view)
 
-      view_changes = switch typeof view_for
+      view_changes = if view_for? and typeof view_for is 'object'
 
-        when null, undefined
+For a static `view_for` object, we apply the `.map` function locally to each modified document,
+therefor dynamically computing the outcome of the view. (CouchDB does the same thing on its side,
+so if we need to reconnect we can query the CouchDB view and obtain the same results.)
+
+          changes_view view_for.map, changes
+          .multicast()
+        else
           most.empty()
 
 We do not provide support for view changes for `view_for` functions.
-
-        when 'function'
 
 The reason this is a bad idea is that the view to use is decided based on the keys
 (see below for `.app` and `.name`), but the keys are _generated_ by the very
@@ -41,18 +45,6 @@ In details: to use this feature, you would have to provide a function would have
 how to reliably predict which keys will be returned by which ids (in other words it would
 be able to pre-compute the outcome of the `map` function).
 
-          most.empty()
-
-For a static `view_for` object, we apply the `.map` function locally to each modified document,
-therefor dynamically computing the outcome of the view. (CouchDB does the same thing on its side,
-so if we need to reconnect we can query the CouchDB view and obtain the same results.)
-
-        when 'object'
-          changes_view view_for.map, changes
-          .multicast()
-
-        else
-          throw new Error 'view_for must be object or function'
 
 On initial subscription we convert the key into a stream, using the server-side (CouchDB-stored) view.
 
