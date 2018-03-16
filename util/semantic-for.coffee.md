@@ -1,4 +1,4 @@
-    semantic_for = (db) ->
+    semantic_for = (db,fromJS) ->
 
       create: (msg) ->
         doc = msg
@@ -28,7 +28,7 @@ The entries in the `.doc` field are interpreted as simple `set` operations.
 The entries in the `.operations` field are executed by `json_path`.
 Notice that these might fail, in which case the update will not be saved.
 
-          doc = operations?.reduce apply_cmd, doc
+          doc = operations.reduce apply_cmd, doc if operations?
 
 Do not modify the database if the document was not modified.
 

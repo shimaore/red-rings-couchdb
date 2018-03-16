@@ -12,7 +12,7 @@ Changes are not computed for views where the `view_for` parameter is a function.
 
       the_db = new CouchDB db_uri
 
-      semantic = semantic_for the_db
+      semantic = semantic_for the_db, fromJS
 
       get_key = (key) ->
         the_db.get(key).catch -> null

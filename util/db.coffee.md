@@ -9,7 +9,8 @@ It provides exactly what this module needs, but no more.
         else
           @uri = "#{uri}/"
 
-      put: ({_id} = doc) ->
+      put: (doc) ->
+        {_id} = doc
         uri = new URL ec(_id), @uri
         agent
         .put uri.toString()
