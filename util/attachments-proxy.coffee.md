@@ -62,7 +62,7 @@ Web server
         return next "Invalid limit #{JSON.stringify limit}" unless limit?.match(/^\d+$/) and parseInt(limit) > Date.now()
 
         switch req.method
-          when 'PUT'
+          when 'PUT', 'OPTIONS'
             if token is signature UPLOAD, pathname, rev, limit
               return proxy()
             else
