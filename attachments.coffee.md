@@ -31,10 +31,10 @@ In the parameter we need:
           ec_id = ec id
           msg.withMutations (msg) ->
             attachments.forEach (rec,name) ->
+              path = "/#{ec_id}/#{ec name}"
               if rec.has 'stub'
-                path = "/#{ec_id}/#{ec name}"
                 msg = msg.setIn ['doc','_attachments',name,'download_uri'], download_uri path, rev
-                msg = msg.setIn ['doc','_attachments',name,'upload_uri'], upload_uri path, rev
+              msg = msg.setIn ['doc','_attachments',name,'upload_uri'], upload_uri path, rev
               return
             msg
 
