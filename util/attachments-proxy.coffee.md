@@ -11,6 +11,8 @@ Web server
 
       {secret,hash,timeout} = our_proxy
 
+      cors = Cors()
+
       hash ?= 'sha256'
       timeout ?= 3600*1000 # one hour
 
@@ -62,7 +64,10 @@ Web server
         return next "Invalid limit #{JSON.stringify limit}" unless limit?.match(/^\d+$/) and parseInt(limit) > Date.now()
 
         switch req.method
-          when 'PUT', 'OPTIONS'
+          when 'OPTIONS'
+            return cors req, res, next
+
+          when 'PUT'
             if token is signature UPLOAD, pathname, rev, limit
               return proxy()
             else
@@ -95,4 +100,5 @@ Web server
     {URL} = require 'url'
     crypto = require 'crypto'
     request = require 'request'
+    Cors = require 'cors'
     {strictEqual} = assert = require 'assert'
