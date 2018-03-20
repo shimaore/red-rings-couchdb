@@ -48,6 +48,7 @@ In details: to use this feature, you would have to provide a function would have
 how to reliably predict which keys will be returned by which ids (in other words it would
 be able to pre-compute the outcome of the `map` function).
 
+Also, we do not provide support for view changes for aggregate views (`count`, `range` etc.).
 
 On initial subscription we convert the key into a stream, using the server-side (CouchDB-stored) view.
 
