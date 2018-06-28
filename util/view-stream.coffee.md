@@ -3,7 +3,10 @@ CouchDB view as a stream of `row`
 
     view_stream = (db_uri,app,view,params) ->
 
-      uri = "#{db_uri}/_design/#{app}/_view/#{view}"
+      if app?
+        uri = "#{db_uri}/_design/#{app}/_view/#{view}"
+      else
+        uri = "#{db_uri}/_all_docs"
 
       n = oboe_stream_request url:uri,qs:params
 
