@@ -4,7 +4,7 @@ CouchDB back-end
 ### Back-end for a regular (static) DB such as provisioning
 
 - `db_uri` refers to a database URI.
-- `view_for` refers to a view object or a function that returns a view object (based on a requested key). A view object contains `view.map` (the map function as a function), `view.app`,and `view.name`, which all refer to the same view.
+- `view_for` refers to a view object or a function that returns a view object (based on a requested key). A view object contains `view.map` (the map function as a function), `view.app`,and `view.name`, which all refer to the same view. If `view_for` is `null`, the `_all_docs` "identity" "view" is used.
 
 Changes are not computed for views where the `view_for` parameter is a function. (See below for the reason.) This could be worked-around by providing a database-to-view mapper that records the outcome of the view in a new database (and we are asked to monitor that database). (But notice that regular CouchDB databases are not suitable for this, since they can't directly handle non-string ids, and more importantly, cannot deal with duplicated keys/ids either.)
 
@@ -25,7 +25,6 @@ Document changes
 Changeset for wandering-country-view/all (or other view)
 
       view_changes = switch view_for? and typeof view_for
-
 
 For a static `view_for` object, we apply the `.map` function locally to each modified document,
 therefor dynamically computing the outcome of the view. (CouchDB does the same thing on its side,
@@ -55,7 +54,8 @@ On initial subscription we convert the key into a stream, using the server-side 
       view_key = switch view_for? and typeof view_for
 
         when false
-          (key) -> most.empty()
+          (key) ->
+            view_as_stream db_uri, null, '_all_docs', key
 
         when 'object' # there is only one DB, or the view is named the same in all DBs
           (key) ->

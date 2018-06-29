@@ -6,7 +6,7 @@ CouchDB view as a stream of `row`
       if app?
         uri = "#{db_uri}/_design/#{app}/_view/#{view}"
       else
-        uri = "#{db_uri}/_all_docs"
+        uri = "#{db_uri}/#{view}"
 
       n = oboe_stream_request url:uri,qs:params
 
