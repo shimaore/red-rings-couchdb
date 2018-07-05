@@ -57,9 +57,9 @@ It provides exactly what this module needs, but no more.
           uri.searchParams.set 'since', since
           fromEventSource new EventSource uri.toString()
         # MessageEvent {type,data,lastEventId,origin}
-        .tap ({seq}) -> since = seq
         .map ({data}) -> data
         .map JSON.parse
+        .tap ({seq}) -> since = seq if seq?
 
     module.exports = CouchDB
     ec = encodeURIComponent
