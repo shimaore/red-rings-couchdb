@@ -47,10 +47,11 @@ It provides exactly what this module needs, but no more.
         uri.searchParams.set 'include_docs', include_docs ? false
 
         retry = (s) ->
-          console.error 'retry', since, uri.pathname
           s()
           .continueWith -> retry s # necessary?
-          .recoverWith -> retry s
+          .recoverWith (error) ->
+            console.error 'retry', error.stack, uri.host, uri.pathname, now
+            retry s
 
         retry ->
           uri.searchParams.set 'since', since
