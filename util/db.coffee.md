@@ -22,7 +22,6 @@ It provides exactly what this module needs, but no more.
       get: (_id,{rev} = {}) ->
         uri = new URL ec(_id), @uri
         uri.searchParams.set 'rev', rev if rev?
-        console.log uri.toString()
         agent
         .get uri.toString()
         .accept 'json'
@@ -48,7 +47,7 @@ It provides exactly what this module needs, but no more.
         uri.searchParams.set 'include_docs', include_docs ? false
 
         retry = (s) ->
-          console.log 'retry', since
+          console.error 'retry', since, uri
           s()
           .continueWith -> retry s # necessary?
           .recoverWith -> retry s
