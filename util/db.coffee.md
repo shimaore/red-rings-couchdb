@@ -50,7 +50,7 @@ It provides exactly what this module needs, but no more.
           s()
           .continueWith -> retry s # necessary?
           .recoverWith (error) ->
-            console.error 'retry', error.stack, uri.host, uri.pathname, since
+            console.error 'retry', (error.stack ? error), uri.host, uri.pathname, since
             retry s
 
         retry ->
