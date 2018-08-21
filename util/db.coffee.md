@@ -29,7 +29,7 @@ It provides exactly what this module needs, but no more.
 
       delete: ({_id,_rev}) ->
         uri = new URL ec(_id), @uri
-        uri.searchParams.set 'rev', rev if rev?
+        uri.searchParams.set 'rev', _rev if _rev?
         agent
         .delete uri.toString()
         .accept 'json'
