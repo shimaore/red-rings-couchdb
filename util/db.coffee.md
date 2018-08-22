@@ -46,17 +46,20 @@ It provides exactly what this module needs, but no more.
         uri.searchParams.set 'heartbeat', true
         uri.searchParams.set 'include_docs', include_docs ? false
 
-        retry = (s) ->
-          s()
-          .continueWith -> retry s # necessary?
-          .recoverWith (error) ->
-            console.error 'retry', (error.stack ? error), uri.host, uri.pathname, since
-            retry s
+The stream might end because the server disconnects or other errors.
+In all cases we let it finish cleanly.
 
-        retry ->
+        s = ->
           uri.searchParams.set 'since', since
           fromEventSource new EventSource uri.toString()
-        # MessageEvent {type,data,lastEventId,origin}
+          .continueWith ->
+            console.error 'retry', uri.host, uri.pathname, since
+            most.never()
+          .recoverWith (error) ->
+            console.error 'retry', (error.stack ? error), uri.host, uri.pathname, since
+            most.never()
+
+        autoRestart(s)
         .map ({data}) -> data
         .map JSON.parse
         .tap ({seq}) -> since = seq if seq?
@@ -68,3 +71,16 @@ It provides exactly what this module needs, but no more.
     {fromEventSource} = require 'most-w3msg'
     {URL} = require 'url'
     agent = require 'superagent'
+
+When the stream finishes, we restart it with a small delay.
+
+    autoRestart = (s) ->
+
+      most
+      .generate -> yield 200
+      .startWith 0
+      .map (delay) ->
+        await sleep delay
+        s()
+      .chain most.fromPromise
+      .switchLatest()
