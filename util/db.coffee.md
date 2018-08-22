@@ -74,6 +74,8 @@ In all cases we let it finish cleanly.
 
 When the stream finishes, we restart it with a small delay.
 
+    sleep = (timeout) -> new Promise (resolve) -> setTimeout resolve, timeout
+
     autoRestart = (s) ->
 
       most
