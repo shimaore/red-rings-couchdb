@@ -4,6 +4,9 @@ It provides exactly what this module needs, but no more.
     LRU = require 'lru-cache'
     {EventEmitter2} = require 'eventemitter2'
 
+    http = require 'http'
+    https = require 'https'
+
     lru_dispose = new EventEmitter2 newListener: false, verboseMemoryLeak: true
 
     options =
@@ -30,12 +33,20 @@ It provides exactly what this module needs, but no more.
           @cache = static_cache
           @limit = most.never()
 
+        switch
+          when uri.match /^http:/
+            @agent = agent.agent http.globalAgent
+          when uri.match /^https:/
+            @agent = agent.agent https.globalAgent
+          else
+            @agent = agent
+
         return
 
       put: (doc) ->
         {_id} = doc
         uri = new URL ec(_id), @uri
-        agent
+        @agent
         .put uri.toString()
         .type 'json'
         .accept 'json'
@@ -45,7 +56,7 @@ It provides exactly what this module needs, but no more.
       get: (_id,{rev} = {}) ->
         uri = new URL ec(_id), @uri
         uri.searchParams.set 'rev', rev if rev?
-        agent
+        @agent
         .get uri.toString()
         .accept 'json'
         .then ({body}) -> body
@@ -53,7 +64,7 @@ It provides exactly what this module needs, but no more.
       delete: ({_id,_rev}) ->
         uri = new URL ec(_id), @uri
         uri.searchParams.set 'rev', _rev if _rev?
-        agent
+        @agent
         .delete uri.toString()
         .accept 'json'
         .then ({body}) -> body
