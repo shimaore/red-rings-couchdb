@@ -51,7 +51,7 @@ Web server
           }, options
           the_proxy.on 'error', (error) ->
             console.error 'Proxy', method, options.url, error
-          req.pipe the_proxy if method is 'PUT'
+          req.pipe the_proxy
           the_proxy.pipe res
           return
 
