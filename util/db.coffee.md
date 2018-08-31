@@ -13,7 +13,7 @@ It provides exactly what this module needs, but no more.
 
     lru_cache = LRU options
 
-    static_cache = new Set()
+    static_cache = new Map()
 
     class CouchDB
 
