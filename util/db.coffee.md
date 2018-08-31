@@ -1,13 +1,36 @@
 This is a minimalist CouchDB (HTTP) API
 It provides exactly what this module needs, but no more.
 
+    LRU = require 'lru-cache'
+    {EventEmitter2} = require 'eventemitter2'
+
+    lru_dispose = new EventEmitter2 newListener: false, verboseMemoryLeak: true
+
+    options =
+      max: 200
+      dispose: (key) -> ev.emit key
+      maxAge: 20*60*1000
+
+    lru_cache = LRU options
+
+    static_cache = new Set()
+
     class CouchDB
 
-      constructor: (uri) ->
+      constructor: (uri,use_lru) ->
         if uri.match /\/$/
           @uri = uri
         else
           @uri = "#{uri}/"
+
+        if use_lru
+          @cache = lru_cache
+          @limit = most.fromEvent @uri, lru_dispose
+        else
+          @cache = static_cache
+          @limit = most.never()
+
+        return
 
       put: (doc) ->
         {_id} = doc
@@ -40,6 +63,9 @@ It provides exactly what this module needs, but no more.
         live ?= true
         throw new Error 'Only live streaming is supported' unless live is true
 
+        if @cache.has @uri
+          return @cache.get @uri
+
         since ?= 'now'
         uri = new URL '_changes', @uri
         uri.searchParams.set 'feed', 'eventsource'
@@ -59,10 +85,15 @@ In all cases we let it finish cleanly.
             console.error 'retry', (error.stack ? error), uri.host, uri.pathname, since
             most.never()
 
-        autoRestart(s)
-        .map ({data}) -> data
-        .map JSON.parse
-        .tap ({seq}) -> since = seq if seq?
+        stream = autoRestart(s)
+          .map ({data}) -> data
+          .map JSON.parse
+          .tap ({seq}) -> since = seq if seq?
+          .until @limit
+          .multicast()
+
+        @cache.set @uri, stream
+        stream
 
     module.exports = CouchDB
     ec = encodeURIComponent

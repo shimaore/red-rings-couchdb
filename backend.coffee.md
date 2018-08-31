@@ -8,9 +8,9 @@ CouchDB back-end
 
 Changes are not computed for views where the `view_for` parameter is a function. (See below for the reason.) This could be worked-around by providing a database-to-view mapper that records the outcome of the view in a new database (and we are asked to monitor that database). (But notice that regular CouchDB databases are not suitable for this, since they can't directly handle non-string ids, and more importantly, cannot deal with duplicated keys/ids either.)
 
-    couchdb_backend = (db_uri,view_for,fromJS) ->
+    couchdb_backend = (db_uri,view_for,fromJS,use_lru) ->
 
-      the_db = new CouchDB db_uri
+      the_db = new CouchDB db_uri, use_lru
 
       semantic = semantic_for the_db, fromJS
 
