@@ -44,11 +44,10 @@ Web server
           options.url.searchParams.set 'rev', rev
           options.url = options.url.toString()
 
-          the_proxy = request Object.assign {
+          the_proxy = agent Object.assign {
             method
             followRedirects: false
             maxRedirects: 0
-            forever: true
           }, options
           req.pipe the_proxy
           the_proxy.pipe res
@@ -101,5 +100,7 @@ Web server
     {URL} = require 'url'
     crypto = require 'crypto'
     request = require 'request'
+    agent = request.defaults
+      forever: true
     Cors = require 'cors'
     {strictEqual} = assert = require 'assert'
