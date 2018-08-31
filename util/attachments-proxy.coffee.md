@@ -51,7 +51,7 @@ Web server
           }, options
           the_proxy.on 'error', (error) ->
             console.error 'Proxy', method, options.url, error
-          req.pipe the_proxy
+          req.pipe the_proxy if method is 'PUT'
           the_proxy.pipe res
           return
 
@@ -104,6 +104,6 @@ Web server
     crypto = require 'crypto'
     request = require 'request'
     agent = request.defaults
-      pool: maxSockets: 50
+      pool: maxSockets: 200
     Cors = require 'cors'
     {strictEqual} = assert = require 'assert'
