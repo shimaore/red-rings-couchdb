@@ -104,6 +104,6 @@ Web server
     crypto = require 'crypto'
     request = require 'request'
     agent = request.defaults
-      forever: true
+      pool: maxSockets: 50
     Cors = require 'cors'
     {strictEqual} = assert = require 'assert'
