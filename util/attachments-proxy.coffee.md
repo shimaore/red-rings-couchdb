@@ -53,7 +53,6 @@ Web server
           }, options
           the_proxy.on 'error', (error) ->
             console.error 'Proxy', method, options.url, error
-          res.setHeader 'Connection', 'close'
           req.pipe the_proxy
           the_proxy.pipe res
           return
@@ -106,6 +105,7 @@ Web server
     {URL} = require 'url'
     crypto = require 'crypto'
     request = require 'request'
-    agent = request.defaults()
+    agent = request.defaults
+      pool: false
     Cors = require 'cors'
     {strictEqual} = assert = require 'assert'
