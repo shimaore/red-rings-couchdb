@@ -48,6 +48,8 @@ Web server
             method
             followRedirects: false
             maxRedirects: 0
+            headers:
+              Connection: 'close'
           }, options
           the_proxy.on 'error', (error) ->
             console.error 'Proxy', method, options.url, error
@@ -103,7 +105,6 @@ Web server
     {URL} = require 'url'
     crypto = require 'crypto'
     request = require 'request'
-    agent = request.defaults
-      pool: maxSockets: 200
+    agent = request.defaults()
     Cors = require 'cors'
     {strictEqual} = assert = require 'assert'
