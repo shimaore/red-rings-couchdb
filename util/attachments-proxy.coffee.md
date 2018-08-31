@@ -49,6 +49,8 @@ Web server
             followRedirects: false
             maxRedirects: 0
           }, options
+          the_proxy.on 'error', (error) ->
+            console.error 'Proxy', method, options.url, error
           req.pipe the_proxy
           the_proxy.pipe res
 
