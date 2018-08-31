@@ -48,6 +48,7 @@ Web server
             method
             followRedirects: false
             maxRedirects: 0
+            forever: true
           }, options
           req.pipe the_proxy
           the_proxy.pipe res
