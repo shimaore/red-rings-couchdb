@@ -53,6 +53,7 @@ Web server
           }, options
           the_proxy.on 'error', (error) ->
             console.error 'Proxy', method, options.url, error
+          res.setHeader 'Connection', 'close'
           req.pipe the_proxy
           the_proxy.pipe res
           return
