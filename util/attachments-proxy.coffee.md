@@ -53,6 +53,7 @@ Web server
             console.error 'Proxy', method, options.url, error
           req.pipe the_proxy
           the_proxy.pipe res
+          return
 
         {pathname,searchParams} = new URL req.url, our_proxy.url
 
