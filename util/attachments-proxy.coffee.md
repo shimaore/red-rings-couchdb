@@ -53,8 +53,13 @@ Web server
           }, options
           the_proxy.on 'error', (error) ->
             console.error 'Proxy', method, options.url, error
-          req.pipe the_proxy
-          the_proxy.pipe res
+          # req.socket.setKeepAlive true
+          res.setHeader 'Connection', 'close'
+          req.on 'end', -> the_proxy.end()
+          res.on 'close', -> the_proxy.abort() # this is the main one
+          req
+          .pipe the_proxy
+          .pipe res
           return
 
         {pathname,searchParams} = new URL req.url, our_proxy.url
