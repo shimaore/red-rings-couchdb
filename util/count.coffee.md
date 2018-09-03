@@ -23,6 +23,6 @@ This assumes the view's reducer is `_count`, obviously.
       view_stream db_uri, app, view, params
 
     module.exports = count_as_stream
-    view_stream = require './view-stream'
+    view_stream = require 'most-couchdb/view-stream'
     most = require 'most'
     Immutable = require 'immutable'

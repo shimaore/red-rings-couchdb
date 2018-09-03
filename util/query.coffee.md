@@ -13,4 +13,4 @@ Query on the key
       view_stream db_uri, app, view, params
 
     module.exports = query_as_stream
-    view_stream = require './view-stream'
+    view_stream = require 'most-couchdb/view-stream'

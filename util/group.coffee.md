@@ -22,5 +22,5 @@ Use level=999 to simulate CouchDB's `group=true` ("exact" grouping).
       view_stream db_uri,app,view, params
 
     module.exports = group_as_stream
-    view_stream = require './view-stream'
+    view_stream = require 'most-couchdb/view-stream'
     most = require 'most'

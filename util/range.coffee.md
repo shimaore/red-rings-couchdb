@@ -18,4 +18,4 @@ Note: `min` can also be interpreted as `ge` and `max` as `le`.
       view_stream db_uri, app, view, params
 
     module.exports = range_as_stream
-    view_stream = require './view-stream'
+    view_stream = require 'most-couchdb/view-stream'
