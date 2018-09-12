@@ -16,20 +16,20 @@
   "author": "",
   "license": "Unlicense",
   "dependencies": {
-    "abrasive-ducks": "^3.0.2",
-    "abrasive-ducks-transducers": "^2.0.0",
-    "concat-stream": "^1.6.0",
+    "abrasive-ducks": "^3.0.5",
+    "abrasive-ducks-transducers": "^2.1.2",
+    "concat-stream": "^1.6.2",
     "cors": "^2.8.4",
     "immutable": "^4.0.0-rc.9",
     "most": "^1.7.3",
-    "most-couchdb": "^1.0.0",
-    "red-rings": "^1.1.0",
+    "most-couchdb": "^1.3.0",
+    "red-rings": "^2.0.0",
     "red-rings-path": "^1.0.0",
-    "red-rings-semantic": "^1.1.0",
-    "request": "^2.83.0"
+    "red-rings-semantic": "^1.2.3",
+    "request": "^2.88.0"
   },
   "devDependencies": {
-    "coffeescript": "^2.2.1",
-    "mocha": "^5.0.1"
+    "coffeescript": "^2.3.1",
+    "mocha": "^5.2.0"
   }
 }
