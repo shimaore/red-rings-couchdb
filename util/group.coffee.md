@@ -1,4 +1,4 @@
-    group_as_stream = (db_uri,app,view,level,min,max) ->
+    group = (level,min,max) ->
 
       params =
         sorted: false
@@ -6,7 +6,7 @@
 
       level = parseInt level
       if isNaN(level) or level < 0
-        return most.empty()
+        return null
 
       params.group_level = level
 
@@ -19,8 +19,6 @@ Use level=999 to simulate CouchDB's `group=true` ("exact" grouping).
       if max?
         params.endkey = JSON.stringify max
 
-      view_stream db_uri,app,view, params
+      params
 
-    module.exports = group_as_stream
-    view_stream = require 'most-couchdb/view-stream'
-    most = require 'most'
+    module.exports = group

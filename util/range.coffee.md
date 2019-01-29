@@ -3,7 +3,7 @@ Query on a range
 
 Note: `min` can also be interpreted as `ge` and `max` as `le`.
 
-    range_as_stream = (db_uri,app,view,min,max) ->
+    range = (min,max) ->
 
       params =
         reduce: false
@@ -15,7 +15,6 @@ Note: `min` can also be interpreted as `ge` and `max` as `le`.
       if max?
         params.endkey = JSON.stringify max
 
-      view_stream db_uri, app, view, params
+      params
 
-    module.exports = range_as_stream
-    view_stream = require 'most-couchdb/view-stream'
+    module.exports = range

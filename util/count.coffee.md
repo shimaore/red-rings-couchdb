@@ -3,7 +3,7 @@ Reduce the view
 
 This assumes the view's reducer is `_count`, obviously.
 
-    count_as_stream = (db_uri,app,view,key,detail) ->
+    count = (key,detail) ->
 
       params =
         reduce: true
@@ -11,7 +11,7 @@ This assumes the view's reducer is `_count`, obviously.
       if detail? and Immutable.List.isList key
         detail = parseInt detail
         if isNaN(detail) or detail < 0
-          return most.empty()
+          return null
 
         params.group_level = key.size + detail
         params.startkey = JSON.stringify key
@@ -20,9 +20,7 @@ This assumes the view's reducer is `_count`, obviously.
         params.key = JSON.stringify key
         params.group = true
 
-      view_stream db_uri, app, view, params
+      params
 
-    module.exports = count_as_stream
-    view_stream = require 'most-couchdb/view-stream'
-    most = require 'most'
+    module.exports = count
     Immutable = require 'immutable'
