@@ -14,10 +14,10 @@ Use level=0 to simulate CouchDB's `group=false`.
 Use level=999 to simulate CouchDB's `group=true` ("exact" grouping).
 
       if min?
-        params.startkey = JSON.stringify min
+        params.startkey = min
 
       if max?
-        params.endkey = JSON.stringify max
+        params.endkey = max
 
       params
 

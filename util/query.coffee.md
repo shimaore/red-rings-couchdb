@@ -8,7 +8,7 @@ Query on the key
         sorted: false
 
       if key?
-        params.key = JSON.stringify key
+        params.key = key
 
       params
 

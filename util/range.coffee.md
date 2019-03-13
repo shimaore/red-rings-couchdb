@@ -11,9 +11,9 @@ Note: `min` can also be interpreted as `ge` and `max` as `le`.
         inclusive_end: true
 
       if min?
-        params.startkey = JSON.stringify min
+        params.startkey = min
       if max?
-        params.endkey = JSON.stringify max
+        params.endkey = max
 
       params
 

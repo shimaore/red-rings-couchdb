@@ -14,10 +14,10 @@ This assumes the view's reducer is `_count`, obviously.
           return null
 
         params.group_level = key.size + detail
-        params.startkey = JSON.stringify key
-        params.endkey = JSON.stringify key.concat Immutable.Repeat Immutable.Map(), 1
+        params.startkey = key
+        params.endkey = key.concat Immutable.Repeat Immutable.Map(), 1
       else
-        params.key = JSON.stringify key
+        params.key = key
         params.group = true
 
       params
