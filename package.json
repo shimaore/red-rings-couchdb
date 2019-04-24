@@ -1,6 +1,6 @@
 {
   "name": "red-rings-couchdb",
-  "version": "3.8.0",
+  "version": "3.9.0",
   "description": "CouchDB backend for red-rings/abrasive-ducks",
   "main": "index.js",
   "scripts": {
