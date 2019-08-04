@@ -74,7 +74,7 @@ On initial subscription we convert the key into a stream, using the server-side 
 
     module.exports = couchdb_backend
 
-    changes_view = require 'most-couchdb/changes-view'
+    changes_view = require './util/changes-view'
     view_as_stream = require './util/view'
     most = require 'most'
     CouchDB = require 'most-couchdb'

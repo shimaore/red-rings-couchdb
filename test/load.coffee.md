@@ -9,6 +9,7 @@
         require '../util/apply-command'
         require '../util/attachments-proxy'
         require '../util/build-backend'
+        require '../util/changes-view'
         require '../util/count'
         require '../util/group'
         require '../util/query'
@@ -21,7 +22,7 @@
     describe 'View-as-stream', ->
       m = require '../util/view'
 
-      the_db = new CouchDB "http://#{process.env.COUCHDB_USER}:#{process.env.COUCHDB_PASSWORD}@127.0.0.1:5984/test"
+      the_db = new CouchDB "http://#{process.env.COUCHDB_USER ? 'admin'}:#{process.env.COUCHDB_PASSWORD ? 'password'}@127.0.0.1:5984/test"
 
       before ->
         await the_db.create()
